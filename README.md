@@ -33,7 +33,7 @@ dotnet ef dbcontext scaffold "server=**localhost**;port=**3306**;database=**appl
 ```
 
 ## Configure App To Use MySQL
-open file **Program.cs**.
+open file **SampleController.cs**.
 ```csharp
 using Microsoft.EntityFrameworkCore;
 using SamplePomeloEFcore.Context;
@@ -45,3 +45,35 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 ```
+
+## Configure controller To Use DbContext
+open file **Program.cs**.
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using SamplePomeloEFcore.Context;
+using SamplePomeloEFcore.Models;
+
+namespace SamplePomeloEFcore.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class SampleController : ControllerBase
+    {
+
+        private ApplicationDbContext context;
+        public SampleController(ApplicationDbContext _context)
+        {
+            context = _context;
+        }
+
+        [HttpGet]
+        public IList<sample> Get()
+        {
+            return (this.context.samples.ToList());
+        }
+
+    }
+}
+
+```
+
